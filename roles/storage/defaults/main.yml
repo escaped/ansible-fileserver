@@ -1,0 +1,14 @@
+harddisks: []
+union_mount: []
+
+#harddisks:
+#  - device:
+#    dest: /mnt/alpha
+#    fstype: btrfs or ext4
+#    btrfs_subvolumes: []  # optional
+
+#union_mount:
+#  - dest: /mnt/union
+#    dirs:
+#      - /mnt/alpha/merge1
+#      - /mnt/alpha/merge2

@@ -1,0 +1,53 @@
+hostname: Nemo
+admin_email: hostmaster@domain.tld
+users:
+  - name: alex
+    key: "ssh-dss invalidYqtBbZ/543pBy7OAK8X154v7GV3D9oqJsw== user@host"
+    # pw is test
+    password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
+    admin: True
+
+
+harddisks:
+  #- device: UUID=7d74adb8-e923-4401-947a-1b2461f5c4ae
+  - device: /dev/sda1
+    dest: /mnt/alpha
+    fstype: btrfs
+    opts: defaults
+    #btrfs_subvolumes: []  # optional
+  #- device: UUID=0508237f-3487-4fed-99c0-8632b76d7894
+  - device: /dev/sdb1
+    dest: /mnt/beta
+    fstype: btrfs
+    opts: defaults
+    #btrfs_subvolumes: []  # optional
+  #- device: UUID=018ae6bf-3013-441a-89ca-9767bb1a09bd
+  - device: /dev/sdc1
+    dest: /mnt/charlie
+    opts: defaults
+    fstype: ext4
+
+union_mount:
+  - dest: /mnt/union/
+    dirs:
+      - /mnt/alpha/test1
+      - /mnt/beta/test1
+
+
+samba:
+  name: Nemo
+  workgroup: lan
+  comment: fileserver
+  group: users
+  shares:
+    - name: Test1
+      path: /mnt/test1
+      guest: yes # default: yes
+      guest_can_write: yes # default: no
+    - name: alpha
+      path: /mnt/alpha
+      guest: no # default: yes
+      guest_can_write: no # default: no
+      write_users:
+        - alex
+      read_users: []

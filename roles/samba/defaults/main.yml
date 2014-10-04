@@ -1,0 +1,13 @@
+samba:
+  name: fileserver
+  workgroup: lan
+  comment: my fileserver
+  group: users
+  shares: []
+#  shares:
+#    - name:
+#      path:
+#      guest:  # default: yes
+#      guest_can_write:  # default: no
+#      write_users:
+#      read_users:

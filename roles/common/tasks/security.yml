@@ -1,0 +1,22 @@
+---
+- name: Install security-related packages
+  apt: pkg={{ item }} state=installed install_recommends=no
+  with_items:
+    - fail2ban
+    - rkhunter
+    - lynis
+
+- name: start fail2ban
+  service: name=fail2ban state=started enabled=yes
+
+- name: Copy fail2ban configuration into place
+  template: src=etc_fail2ban_jail.local.j2 dest=/etc/fail2ban/jail.local
+  notify: restart fail2ban
+
+- name: Update sshd config to disallow root logins
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^PermitRootLogin line="PermitRootLogin no" state=present
+  notify: restart ssh
+
+- name: Update sshd to disallow password authentication
+  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
+  notify: restart ssh

@@ -1,0 +1,17 @@
+---
+- hosts: all
+  sudo: yes
+
+  #update apt-cache if not updated for 12 hours
+  pre_tasks:
+    - name: check apt last update
+      stat: path=/var/cache/apt
+      register: apt_cache_stat
+    - name: update apt if needed
+      apt: update_cache=yes
+      when: ansible_date_time.epoch|float - apt_cache_stat.stat.mtime > 60*60*12
+
+  roles:
+    - common
+    - storage
+    - samba

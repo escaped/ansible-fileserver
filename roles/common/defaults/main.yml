@@ -1,0 +1,8 @@
+---
+hostname: fileserver
+users: []
+#users:
+#  - name: hans
+#    key: "ssh-rsa ...."
+#    password:  # see http://docs.ansible.com/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
+#    admin: False

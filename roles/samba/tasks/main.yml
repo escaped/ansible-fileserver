@@ -1,0 +1,15 @@
+---
+- name: samba is installed
+  apt: name=samba state=installed
+
+- name: samba config
+  template: src=smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode=0644
+  notify:
+    - restart samba
+
+- name: samba share groups
+  group: name={{samba.group}} state=present
+
+- name: samba share folders
+  file: path="{{item.path}}" state=directory mode=775 owner=root group={{samba.group}}
+  with_items: samba.shares

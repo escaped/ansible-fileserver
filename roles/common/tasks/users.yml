@@ -1,0 +1,14 @@
+---
+- name: Add ssh users
+  user: name={{item.name}} update_password=on_create password={{item.password}}
+  with_items: users
+
+- name: add public keys to authorized_keys files
+  authorized_key: user={{item.name}} key="{{item.key}}"
+  when: item.key is defined
+  with_items: users
+
+- name: add sudo permissions
+  user: name={{item.name}} groups=sudo append=yes
+  when: item.admin is defined and item.admin
+  with_items: users

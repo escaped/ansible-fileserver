@@ -1,0 +1,8 @@
+*.s[a-w][a-z]
+*~
+_*
+.vagrant
+vagrant_ansible_inventory_default
+*.orig
+*.pyc
+.vault_password
