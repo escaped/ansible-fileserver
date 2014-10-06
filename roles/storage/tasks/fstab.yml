@@ -4,7 +4,7 @@
   with_items: harddisks
 
 - name: mount disks
-  mount: name={{item.dest}} src={{item.device}} fstype={{item.fstype}} opts={{item.opts}} state=mounted
+  mount: name={{item.dest}} src="UUID={{item.uuid}}" fstype={{item.fstype}} opts={{item.opts}} state=mounted
   with_items: harddisks
 
 # TODO mount subvolumes

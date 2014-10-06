@@ -9,20 +9,17 @@ users:
 
 
 harddisks:
-  #- device: UUID=7d74adb8-e923-4401-947a-1b2461f5c4ae
-  - device: /dev/sda1
+  - uuid: 5e76c66b-22a6-4513-8b92-b23ace06c212
     dest: /mnt/alpha
-    fstype: btrfs
+    fstype: ext4
     opts: defaults
     #btrfs_subvolumes: []  # optional
-  #- device: UUID=0508237f-3487-4fed-99c0-8632b76d7894
-  - device: /dev/sdb1
+  - uuid: 1cbd07dc-4b98-496f-8ec3-be915ee1e906
     dest: /mnt/beta
-    fstype: btrfs
+    fstype: ext4
     opts: defaults
     #btrfs_subvolumes: []  # optional
-  #- device: UUID=018ae6bf-3013-441a-89ca-9767bb1a09bd
-  - device: /dev/sdc1
+  - uuid: 083f5ebd-b0e5-4a2d-b750-a42dfdaaa31d
     dest: /mnt/charlie
     opts: defaults
     fstype: ext4

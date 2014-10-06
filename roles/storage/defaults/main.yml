@@ -2,7 +2,7 @@ harddisks: []
 union_mount: []
 
 #harddisks:
-#  - device:
+#  - uuid:
 #    dest: /mnt/alpha
 #    fstype: btrfs or ext4
 #    btrfs_subvolumes: []  # optional
