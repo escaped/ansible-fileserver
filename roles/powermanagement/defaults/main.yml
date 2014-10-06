@@ -1,0 +1,9 @@
+default_spindown: 120
+
+# NOTE: you can add ``spindown`` to your harddisks definition, e.g.
+#harddisks:
+#  - uuid:
+#    dest: /mnt/alpha
+#    fstype: btrfs or ext4
+#    spindown: 60  # * 5s = 5min
+#    btrfs_subvolumes: []  # optional

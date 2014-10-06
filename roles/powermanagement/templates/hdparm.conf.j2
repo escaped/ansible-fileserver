@@ -1,0 +1,5 @@
+{% for hdd in harddisks %}
+/dev/disks/by-uuid/{{hdd.uuid}} {
+    spindown_time = {{hdd.spindown|default(default_spindown)}}
+}
+{% endfor %}

@@ -1,0 +1,12 @@
+SUBSYSTEM=="module", KERNEL=="pcie_aspm", ACTION=="add", TEST=="parameters/policy", ATTR{parameters/policy}="powersave"
+
+SUBSYSTEM=="i2c", ACTION=="add", TEST=="power/control", ATTR{power/control}="auto"
+SUBSYSTEM=="pci", ACTION=="add", TEST=="power/control", ATTR{power/control}="auto"
+SUBSYSTEM=="usb", ACTION=="add", TEST=="power/control", ATTR{power/control}="auto"
+SUBSYSTEM=="usb", ACTION=="add", TEST=="power/autosuspend", ATTR{power/autosuspend}="2"
+SUBSYSTEM=="scsi", ACTION=="add", TEST=="power/control", ATTR{power/control}="auto"
+SUBSYSTEM=="spi", ACTION=="add", TEST=="power/control", ATTR{power/control}="auto"
+
+SUBSYSTEM=="drm", KERNEL=="card*", ACTION=="add", DRIVERS=="radeon", TEST=="power/control", TEST=="device/power_method", ATTR{device/power_method}="profile", ATTR{device/power_profile}="low"
+
+SUBSYSTEM=="scsi_host", KERNEL=="host*", ACTION=="add", TEST=="link_power_management_policy", ATTR{link_power_management_policy}="min_power"
