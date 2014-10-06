@@ -28,26 +28,6 @@
   apt: update_cache=yes
   when: repo_added|changed
 
-- name: install latest kernel from backports
-  apt: pkg={{item}} default_release=wheezy-backports state=latest install_recommends=no
-  with_items:
-    - linux-headers-amd64
-    - linux-image-amd64
-  register: kernel_updated
-
-- name: restart machine
-  command: reboot
-  async: 0
-  poll: 0
-  ignore_errors: true
-  when: kernel_updated|changed
-
-- name: waiting for server to come back
-  local_action: wait_for host={{inventory_hostname}}
-                port={{ansible_ssh_port}} state=started
-  sudo: false
-  when: kernel_updated|changed
-
 - include: users.yml tags=users
 - include: ufw.yml tags=ufw
 - include: security.yml tags=security
