@@ -30,4 +30,8 @@ See `defaults` directories or `host_vars/vagrant`.
 
 ** run remote install **
 
-    ansible-playbook -i hosts -u {{ssh_user}} --ask-sudo-pass --limit domain.tld playbook.yml
+    # bootstrap install
+    ansible-playbook -i hosts -u root  --ask-pass --limit {{hostname}} bootstrap.yml
+
+    # configure system
+    ansible-playbook -i hosts -u {{ssh_user}} --ask-sudo-pass --limit {{hostname}} playbook.yml
