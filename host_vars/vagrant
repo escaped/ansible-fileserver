@@ -47,4 +47,3 @@ samba:
       guest_can_write: no # default: no
       write_users:
         - alex
-      read_users: []
