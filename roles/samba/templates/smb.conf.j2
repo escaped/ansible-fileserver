@@ -32,8 +32,10 @@
 # Security
   unix extensions = no
 
-# Printing
+# disable Printing
   load printers = no
+  printing = bsd
+  printcap name = /dev/null
 
 # Shares
   directory mask = 0770
@@ -48,6 +50,7 @@
 {% if share.write_users is defined %}
   write list = {% for user in share.write_users %}{{user}}{% endfor %}
 {% endif %}
+
 {% if share.read_users is defined %}
   read list = {% for user in share.read_users %}{{user}}{% endfor %}
 {% endif %}
