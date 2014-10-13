@@ -1,8 +1,4 @@
 ---
-- name: Install or update required packages
-  apt: pkg={{item}} default_release=wheezy-backports state=latest install_recommends=no
-  with_items:
-    - btrfs-tools
-
+- include: btrfs.yml tags=btrfs
 - include: fstab.yml tags=fstab
 - include: aufs.yml tags=aufs
