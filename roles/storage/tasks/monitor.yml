@@ -1,0 +1,24 @@
+---
+- name: smartmontools | install
+  apt: name=smartmontools state=installed install_recommends=no
+
+- name: smartmontools | configure
+  copy: src=smartd.conf dest=/etc/smartd.conf
+
+- name: smartmontools| enable service
+  service: name=smartmontools state=running enabled=yes
+
+
+- name: sec | install for btrfs monitor
+  apt: name=sec state=installed
+
+- name: sec | configure
+  copy: src=sec dest=/etc/default/sec
+
+- name: sec | btrfs rules
+  copy: src=sec.conf dest=/etc/sec.conf
+
+- name: sec | enable service
+  service: name=sec state=running enabled=yes
+
+#- name: cron | disk full check

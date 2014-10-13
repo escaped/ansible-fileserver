@@ -1,0 +1,6 @@
+---
+- name: ssmtp | install
+  apt: name=ssmtp state=installed
+
+- name: ssmtp | configure
+  template: src=ssmtp.conf.j2 dest=/etc/ssmtp/ssmtp.conf mode=0640

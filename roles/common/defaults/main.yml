@@ -1,5 +1,10 @@
 ---
 hostname: fileserver
+
+email_smtp: smtp.gmail.com:587
+email_username:
+email_password:
+
 users: []
 #users:
 #  - name: hans

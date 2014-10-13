@@ -33,3 +33,4 @@
 - include: ufw.yml tags=ufw
 - include: security.yml tags=security
 - include: ntp.yml tags=ntp
+- include: ssmtp.yml tags=ssmtp
