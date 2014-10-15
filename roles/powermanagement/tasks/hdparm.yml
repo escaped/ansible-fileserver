@@ -2,8 +2,5 @@
 - name: install hdparm
   apt:  name=hdparm state=installed install_recommends=no
 
-- name: enable hdparm on startup
-  service: name=hdparm state=started enabled=yes
-
 - name: spindown harddisks
   template: src=hdparm.conf.j2 dest=/etc/hdparm.conf

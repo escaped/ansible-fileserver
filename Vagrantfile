@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   config.vm.provider :virtualbox do |vbox, override|
-    override.vm.box = 'rafacas/debian76-plain'
+    override.vm.box = 'ubuntu/trusty64'
     vbox.name = "fileserver"
     vbox.customize ["modifyvm", :id, "--memory", 2048]
 
@@ -24,6 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :ansible do |ansible|
     ansible.playbook = 'playbook.yml'
+    #ansible.playbook = 'updatekernel.yml'
     ansible.inventory_path = "hosts"
     ansible.host_key_checking = false
     #ansible.verbose = 'vvvv'

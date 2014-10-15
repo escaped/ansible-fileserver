@@ -1,6 +1,6 @@
 ---
 - name: samba is installed
-  apt: name=samba default_release=wheezy-backports state=latest install_recommends=no
+  apt: name=samba state=latest install_recommends=no
   with_items:
     - samba
     - smbclient
@@ -26,4 +26,4 @@
   with_items: samba.shares
 
 - name: Set firewall rule
-  ufw: rule=allow name=CIFS
+  ufw: rule=allow name=samba

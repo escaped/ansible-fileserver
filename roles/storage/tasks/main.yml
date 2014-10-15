@@ -1,5 +1,5 @@
 ---
 - include: btrfs.yml tags=btrfs
 - include: fstab.yml tags=fstab
-- include: aufs.yml tags=aufs
+#- include: aufs.yml tags=aufs
 - include: monitor.yml tag=monitor

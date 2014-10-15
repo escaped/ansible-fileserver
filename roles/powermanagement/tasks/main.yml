@@ -2,8 +2,8 @@
 - name: install drivers
   apt: name={{item}} state=installed install_recommends=no
   with_items:
-      - firmware-linux-nonfree
-      - amd64-microcode
+    - linux-firmware-nonfree
+    - amd64-microcode
 
 - name: install acpi
   apt: name={{item}} state=installed install_recommends=no
@@ -11,7 +11,6 @@
       - acpi
       - acpid
       - acpi-support
-      - acpi-support-base
 
 - name: start acpid
   service: name=acpid state=started enabled=yes

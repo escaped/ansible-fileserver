@@ -1,6 +1,8 @@
 ---
 - hosts: all
   sudo: yes
+  vars:
+    kernel_version: 3.16.5
 
   pre_tasks:
     - name: update apt cache
@@ -12,33 +14,33 @@
 
     - include: roles/common/tasks/users.yml
 
-    - name: add wheezy backports (deb)
-      apt_repository: repo="deb http://ftp.debian.org/debian/ wheezy-backports main contrib non-free" update_cache=yes state=present
-      register: repo_added
-
-    - name: add wheezy backports (deb-src)
-      apt_repository: repo="deb-src http://ftp.debian.org/debian/ wheezy-backports main contrib non-free" update_cache=yes state=present
-
-    - name: update repo cache
-      apt: update_cache=yes
-      when: repo_added|changed
-
-    - name: install latest kernel from backports (for btrfs)
-      apt: pkg={{item}} default_release=wheezy-backports state=latest install_recommends=no
-      with_items:
-        - linux-headers-amd64
-        - linux-image-amd64
-      register: kernel_updated
-
-    - name: restart machine
-      command: reboot
-      async: 0
-      poll: 0
-      ignore_errors: true
-      when: kernel_updated|changed
-
-    - name: waiting for server to come back
-      local_action: wait_for host={{ansible_ssh_host}}
-                    port={{ansible_ssh_port}} state=started
-      sudo: false
-      when: kernel_updated|changed
+#    - name: add wheezy backports (deb)
+#      apt_repository: repo="deb http://ftp.debian.org/debian/ wheezy-backports main contrib non-free" update_cache=yes state=present
+#      register: repo_added
+#
+#    - name: add wheezy backports (deb-src)
+#      apt_repository: repo="deb-src http://ftp.debian.org/debian/ wheezy-backports main contrib non-free" update_cache=yes state=present
+#
+#    - name: update repo cache
+#      apt: update_cache=yes
+#      when: repo_added|changed
+#
+#    - name: install latest kernel from backports (for btrfs)
+#      apt: pkg={{item}} default_release=wheezy-backports state=latest install_recommends=no
+#      with_items:
+#        - linux-headers-amd64
+#        - linux-image-amd64
+#      register: kernel_updated
+#
+#    - name: restart machine
+#      command: reboot
+#      async: 0
+#      poll: 0
+#      ignore_errors: true
+#      when: kernel_updated|changed
+#
+#    - name: waiting for server to come back
+#      local_action: wait_for host={{ansible_ssh_host}}
+#                    port={{ansible_ssh_port}} state=started
+#      sudo: false
+#      when: kernel_updated|changed

@@ -1,0 +1,34 @@
+- hosts: all
+  sudo: yes
+  vars:
+    kernel_version: v3.16.6-utopic
+    kernel_debs:
+      - linux-image-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+      - linux-headers-3.16.6-031606_3.16.6-031606.201410150635_all.deb
+      - linux-headers-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+
+  tasks:
+    - name: download kernel
+      get_url: url=http://kernel.ubuntu.com/~kernel-ppa/mainline/{{kernel_version}}/{{item}}
+               dest=/tmp/{{item}}
+      with_items: kernel_debs
+      register: download
+
+    - name: install kernel (1)
+      apt: deb={{item}} state=installed
+      # we need to specify the full path, see bug reports:
+      # https://github.com/ansible/ansible/issues/8314
+      # https://github.com/ansible/ansible/issues/9235
+      with_items:
+        - /tmp/linux-headers-3.16.6-031606_3.16.6-031606.201410150635_all.deb
+      when: download|changed
+
+    - name: install kernel (2)
+      apt: deb={{item}} state=installed
+      with_items:
+        - /tmp/linux-headers-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+        - /tmp/linux-image-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+      when: download|changed
+
+    - debug: msg="New kernel installed. You should restart your machine!"
+      when: download|changed
