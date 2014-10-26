@@ -1,0 +1,17 @@
+---
+- name: mhddfs | install
+  apt: name=mhddfs state=installed
+
+- name: ensure directories to merge do exists
+  file: path={{item.1}} state=directory
+  with_subelements:
+    - union_mount
+    - dirs
+
+- name: create mount points for union mounts
+  file: path={{item.mount}} recurse=yes state=directory
+  with_items: union_mount
+
+- name: mount unification of directories
+  mount: name={{item.dest}} src="mhddfs#{{item.dirs|join(",")}}" fstype=fuse opts="defaults,allow_other" state=mounted
+  with_items: union_mount
