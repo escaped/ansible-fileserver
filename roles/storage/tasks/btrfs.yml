@@ -14,6 +14,8 @@
 - name: btrfs | Install required packages (1)
   apt: pkg={{item}} state=latest
   with_items:
+    - make
+    - gcc
     - uuid-dev
     - libattr1-dev
     - zlib1g-dev
