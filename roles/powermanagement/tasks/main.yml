@@ -48,3 +48,4 @@
   when: kernel_parameters|changed
 
 - include: hdparm.yml tags=hdparm
+- include: powernap.yml tags=powernap
