@@ -4,9 +4,17 @@
 
 - name: smartmontools | configure
   copy: src=smartd.conf dest=/etc/smartd.conf
+  notify: restart smartmontools
 
-- name: smartmontools| enable service
+- name: smartmontools | enable service
+  lineinfile: dest=/etc/default/smartmontools regexp="^#start_smartd"
+              line="start_smartd=yes" state=present
+  when: vm != True
+  notify: restart smartmontools
+
+- name: smartmontools | start service
   service: name=smartmontools state=running enabled=yes
+  when: vm != True
 
 
 - name: sec | install for btrfs monitor
@@ -14,11 +22,11 @@
 
 - name: sec | configure
   copy: src=sec dest=/etc/default/sec
+  notify: restart sec
 
 - name: sec | btrfs rules
   copy: src=sec.conf dest=/etc/sec.conf
+  notify: restart sec
 
 - name: sec | enable service
   service: name=sec state=running enabled=yes
-
-#- name: cron | disk full check
