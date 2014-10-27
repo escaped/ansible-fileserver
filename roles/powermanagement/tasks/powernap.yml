@@ -2,9 +2,22 @@
 - name: powernap | install
   apt: name=powernap state=installed force=yes
 
-- name: powernap | enable service
-  service: name=powernap enabled=yes state=running
-
 - name: powernap | config
   template: src=config.j2 dest=/etc/powernap/config
   notify: restart powernap
+
+- name: powernap | enable service
+  lineinfile: dest=/etc/default/powernap regexp="^START"
+              line="START=yes" state=present
+  notify: restart powernap
+
+- name: powernap | upload 'byuuid' patch
+  copy: src=0001-powernap-allow-byuuid.patch dest=/root/0001-powernap-allow-byuuid.patch
+
+- name: powernap | patch to support 'disk/by-uuid' monitoring
+  patch: patchfile=/root/0001-powernap-allow-byuuid.patch strip=1
+         basedir=/usr/share/pyshared/powernap/
+  notify: restart powernap
+
+- name: powernap | start service
+  service: name=powernap enabled=yes state=running

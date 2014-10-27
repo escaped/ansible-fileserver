@@ -25,7 +25,7 @@ ACTION_METHOD = 2
 # The default is an absence period of 30 seconds.
 # Example:
 #   ABSENT_SECONDS = 30
-ABSENT_SECONDS = 600
+ABSENT_SECONDS = 300
 
 # Grace period, after (ABSENT_SECONDS - GRACE_SECONDS) have elapsed with all of
 # the Monitors with absent activity, the system will send a Wall message for an
@@ -221,8 +221,13 @@ mouse = y
 # already been configured to standby or sleep.  
 # To disable checking specific drives, set them to "n" or "no",
 # or simply comment them.
+# The monitor accepts disk devices found under /dev/ as well as symbolic
+# links to them found under /dev/disk/.
 # Examples:
-#  sda = y
-#  sdb = n
+#  sda = /dev/sda
+#  disk1 = /dev/disk/by-uuid/38fb40d0-195d-11e3-8ffd-0800200c9a66
 [DiskMonitor]
 #sda = y
+{% for hdd in harddisks %}
+disk{{loop.index}} = /dev/disk/by-uuid/{{hdd.uuid}}
+{% endfor %}
