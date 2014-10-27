@@ -41,6 +41,7 @@ samba:
       path: /mnt/test1
       guest: yes # default: yes
       guest_can_write: yes # default: no
+      write_users: []
     - name: alpha
       path: /mnt/alpha
       guest: no # default: yes
