@@ -34,6 +34,16 @@
 
 
 - include: users.yml tags=users
+
+- include: kernel.yml tags=kernel
+  vars:
+    kernel_version: 3.16.6-031606-generic
+    kernel_name: v3.16.6-utopic
+    kernel_debs:
+      - linux-image-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+      - linux-headers-3.16.6-031606_3.16.6-031606.201410150635_all.deb
+      - linux-headers-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
+
 - include: ufw.yml tags=ufw
 - include: security.yml tags=security
 - include: ntp.yml tags=ntp

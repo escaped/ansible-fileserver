@@ -23,29 +23,5 @@
   command: udevadm control --reload-rules
   when: udev_rules|changed
 
-- name: enable ASPM and ACPI (kernel parameter)
-  lineinfile: regexp="^GRUB_CMDLINE_LINUX_DEFAULT"
-              line="GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash acpi=force pcie_aspm=force nmi_watchdog=0\""
-              dest=/etc/default/grub
-              state=present
-  register: kernel_parameters
-
-- name: update grub config
-  command: /usr/sbin/update-grub
-  when: kernel_parameters|changed
-
-- name: restart machine
-  command: reboot
-  async: 0
-  poll: 0
-  ignore_errors: true
-  when: kernel_parameters|changed
-
-- name: waiting for server to come back
-  local_action: wait_for host={{inventory_hostname}}
-                port={{ansible_ssh_port}} state=started
-  sudo: false
-  when: kernel_parameters|changed
-
 - include: hdparm.yml tags=hdparm
 - include: powernap.yml tags=powernap
