@@ -11,6 +11,9 @@
     - mosh
     - git
     - gdisk
+    - unrar
+    - unzip
+    - p7zip
 
 - name: set hostname
   template: src=hostname.j2 dest=/etc/hostname
@@ -48,3 +51,6 @@
 - include: security.yml tags=security
 - include: ntp.yml tags=ntp
 - include: ssmtp.yml tags=ssmtp
+
+# n54l specific
+- include: ethernet.yml tags=ethernet

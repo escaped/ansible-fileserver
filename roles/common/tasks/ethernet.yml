@@ -1,0 +1,8 @@
+---
+- name: ethernet tweaks | update rc.local
+  copy: src=rc.local dest=/etc/rc.local
+  notify: run rc.local
+
+- name: ethernet tweak | update sysctl.conf
+  copy: src=sysctl.conf dest=/etc/sysctl.conf
+  notify: reload sysctl

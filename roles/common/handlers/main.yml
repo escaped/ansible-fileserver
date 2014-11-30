@@ -9,3 +9,9 @@
 
 - name: restart fail2ban
   service: name=fail2ban state=restarted
+
+- name: run rc.local
+  command: /usr/bin/env sh /etc/rc.local
+
+- name: reload sysctl
+  command: sysctl -p
