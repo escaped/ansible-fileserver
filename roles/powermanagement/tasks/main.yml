@@ -17,11 +17,7 @@
 
 - name: install powermanagement udev rule
   copy: src=90-local-n54l.rules dest=/etc/udev/rules.d/90-local-n54l.rules
-  register: udev_rules
-
-- name: reload udev rules
-  command: udevadm control --reload-rules
-  when: udev_rules|changed
+  notify: reload udev
 
 - include: hdparm.yml tags=hdparm
 - include: powernap.yml tags=powernap

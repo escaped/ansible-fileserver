@@ -1,3 +1,6 @@
 ---
 - name: restart powernap
   service: name=powernap state=restarted
+
+- name: reload udev
+  command: udevadm control --reload-rules
