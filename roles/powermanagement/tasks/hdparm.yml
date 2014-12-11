@@ -4,3 +4,6 @@
 
 - name: spindown harddisks
   template: src=hdparm.conf.j2 dest=/etc/hdparm.conf
+
+- name: disable apm check (required for WD green)
+  lineinfile: dest=/usr/lib/pm-utils/power.d/95hdparm-apm regexp="^(\s*)if hdparm \-i \$dev" line="\1if true" backrefs=yes
