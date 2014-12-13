@@ -6,7 +6,9 @@ users:
     # pw is test
     password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
     admin: True
-
+  - name: hanna
+    # pw is test
+    password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
 
 harddisks:
   - uuid: 5e76c66b-22a6-4513-8b92-b23ace06c212
@@ -32,19 +34,34 @@ union_mount:
 
 
 samba:
-  name: Nemo
+  name: nemo
   workgroup: lan
   comment: fileserver
   group: users
+  guest_password:
+  users:
+    - name: alex
+      initial_password: test
+    - name: hanna
+      initial_password: test
   shares:
-    - name: Test1
-      path: /mnt/test1
-      guest: yes # default: yes
-      guest_can_write: yes # default: no
-      write_users: []
-    - name: alpha
-      path: /mnt/alpha
-      guest: no # default: yes
-      guest_can_write: no # default: no
-      write_users:
-        - alex
+    Public:
+      path: /mnt/beta/public
+      guest ok: yes
+      writeable: yes
+      public: yes
+    Movies:
+      path: /mnt/virtual/Movies
+      guest ok: yes
+      writeable: no
+      write list: alex
+    Series:
+      path: /mnt/virtual/Series
+      guest ok: yes
+      writeable: no
+      write list: alex
+    Pictures:
+      path: /mnt/alpha/Pictures/
+      guest ok: no
+      valid users: alex,hanna
+      write list: alex,hanna

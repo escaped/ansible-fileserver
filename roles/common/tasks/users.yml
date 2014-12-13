@@ -3,6 +3,10 @@
   user: name={{item.name}} update_password=on_create password={{item.password}}
   with_items: users
 
+- name: Add users to 'users' group
+  user: name={{item.name}} groups=users append=yes
+  with_items: users
+
 - name: add public keys to authorized_keys files
   authorized_key: user={{item.name}} key="{{item.key}}"
   when: item.key is defined

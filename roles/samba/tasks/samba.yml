@@ -1,17 +1,35 @@
 ---
 - name: samba is installed
-  apt: name=samba state=latest install_recommends=no
+  apt: name={{item}} state=installed install_recommends=no
   with_items:
     - samba
-    - smbclient
     - libpam-smbpass
 
 - name: samba share groups
   group: name={{samba.group}} state=present
 
+- name: ensure users exists
+  command: id -u {{item.name}}
+  changed_when: False
+  with_items: samba.users
+
+- name: add guest user to samba
+  shell: (echo {{samba.guest_password}}; echo {{samba.guest_password}} ) | smbpasswd -a -s nobody && touch /root/.smbuser_nobody
+         creates=/root/.smbuser_nobody
+
+- name: add users to samba
+  shell: (echo {{item.initial_password}}; echo {{item.initial_password}} ) | smbpasswd -a -s {{item.name}} && touch /root/.smbuser_{{item.name}}
+         creates=/root/.smbuser_{{item.name}}
+  with_items: samba.users
+
 - name: create shared folders
-  file: path="{{item.path}}" state=directory mode=775 owner=root group={{samba.group}}
-  with_items: samba.shares
+  file: path="{{item.1.path}}" state=directory mode=775 owner=root group={{samba.group}}
+  with_items: samba.shares.items()
+
+- name: make public folders writeable
+  file: path="{{item.1.path}}" state=directory mode=777
+  when: item.1.public is defined and item.1.public == True
+  with_items: samba.shares.items()
 
 - name: samba config
   template: src=smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode=0644

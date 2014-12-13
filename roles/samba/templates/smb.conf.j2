@@ -1,4 +1,3 @@
-
 [global]
   netbios name  = {{ samba.name }}
   workgroup     = {{ samba.workgroup }}
@@ -20,13 +19,7 @@
   restrict anonymous = 2
   invalid users = root
 
-  obey pam restrictions = yes
-  pam password change = yes
-  passwd program = /usr/bin/passwd %u
-  passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
-  unix password sync = yes
-
-  map to guest = bad user
+  map to guest = never
   guest account = nobody
 
 # Security
@@ -41,29 +34,9 @@
   directory mask = 0770
   create mask = 0660
 
-{% for share in samba.shares %}
-[{{share.name}}]
-  comment = {{ share.name }}
-  path = {{ share.path }}
-  writeable = {{share.guest_can_write|default('no')}}
-  guest ok = {{share.guest|default('yes')}}
-{% if share.write_users is defined %}
-  write list = {% for user in share.write_users %}{{user}}{% endfor %}
-{% endif %}
-
-{% if share.read_users is defined %}
-  read list = {% for user in share.read_users %}{{user}}{% endfor %}
-{% endif %}
-
-{% if guest|default('yes') == 'no' %}
-  valid users = {% for user in share.write_users %}{{user}} {% endfor %}{% for user in share.read_users %}{{user}} {% endfor %}
-{% else %}
-  available = yes
-  browseable = yes
-  public = yes
-{% endif %}
-
-  hide dot files = yes
-  force group = {{samba.group}}
-
+{% for name, options in samba.shares.items() %}
+[{{ name }}]
+{% for key, value in options.items() %}
+   {{ key }} = {{ value }}
+{% endfor %}
 {% endfor %}

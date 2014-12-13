@@ -26,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = 'playbook.yml'
     ansible.inventory_path = "hosts"
     ansible.host_key_checking = false
+    #ansible.tags = 'samba'
     #ansible.verbose = 'vvvv'
   end
 end

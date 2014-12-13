@@ -3,11 +3,17 @@ samba:
   workgroup: lan
   comment: my fileserver
   group: users
-  shares: []
-#  shares:
+  guest_password:
+  users: []
+#  users:
 #    - name:
-#      path:
-#      guest:  # default: yes
-#      guest_can_write:  # default: no
-#      write_users:
-#      read_users:
+#      initial_password:
+  shares: {}
+#  shares:
+#    Public:
+#      - comment: some public share
+#        path: /mnt/public
+#        guest ok: yes
+#        writeable: yes
+#        ...
+#    ...
