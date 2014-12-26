@@ -1,4 +1,5 @@
 default_spindown: 120
+powernap_idle: 300
 
 # NOTE: you can add ``spindown`` to your harddisks definition, e.g.
 #harddisks:
