@@ -42,7 +42,7 @@
        dest=/tmp/btrfs-tools
        version="v{{btrfs_version}}"
   register: download
-  when: current_version|failed or current_version.stdout != "v{{btrfs_version}}"
+  when: current_version|failed or "v{{btrfs_version}}" not in current_version.stdout
 
 - name: btrfs | compile
   command: chdir=/tmp/btrfs-tools make
