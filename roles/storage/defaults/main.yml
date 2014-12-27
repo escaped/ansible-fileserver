@@ -1,6 +1,8 @@
 btrfs_version: 3.16.2
 harddisks: []
 union_mount: []
+use_aufs: no
+use_mhddfs: yes
 
 #harddisks:
 #  - uuid:

@@ -1,6 +1,10 @@
 ---
 - include: btrfs.yml tags=btrfs
 - include: fstab.yml tags=fstab
-#- include: aufs.yml tags=aufs
-- include: mhddfs.yml tags=mhddfs
+- include: aufs.yml
+  tags: aufs
+  when: use_aufs and not use_mhddfs
+- include: mhddfs.yml
+  tags: mhddfs
+  when: use_mhddfs
 - include: monitor.yml tag=monitor
