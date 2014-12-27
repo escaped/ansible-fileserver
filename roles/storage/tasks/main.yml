@@ -1,6 +1,7 @@
 ---
 - include: btrfs.yml tags=btrfs
 - include: fstab.yml tags=fstab
+- include: directories.yml tags=directories
 - include: aufs.yml
   tags: aufs
   when: use_aufs and not use_mhddfs

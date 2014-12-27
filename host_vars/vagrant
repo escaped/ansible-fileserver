@@ -10,6 +10,7 @@ users:
     # pw is test
     password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
 
+
 harddisks:
   - uuid: 5e76c66b-22a6-4513-8b92-b23ace06c212
     dest: /mnt/alpha
@@ -31,6 +32,13 @@ union_mount:
     dirs:
       - /mnt/alpha/test1
       - /mnt/beta/test1
+
+
+directories:
+   - path: /mnt/alpha/Backup/
+     owner: root
+     group: users
+     permission: "u=rwx,g=rx,o="
 
 
 samba:
