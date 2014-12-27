@@ -3,6 +3,9 @@
   user: name={{item.name}} update_password=on_create password={{item.password}}
   with_items: users
 
+- name: add users group
+  group: name=users state=present
+
 - name: Add users to 'users' group
   user: name={{item.name}} groups=users append=yes
   with_items: users
