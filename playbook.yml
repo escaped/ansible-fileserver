@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
 
   #update apt-cache if not updated for 12 hours
   pre_tasks:
@@ -13,6 +13,7 @@
 
   roles:
     - common
-    - storage
     - powermanagement
+    - storage
     - samba
+    - docker

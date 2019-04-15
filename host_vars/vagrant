@@ -4,11 +4,11 @@ users:
   - name: alex
     key: "ssh-dss invalidYqtBbZ/543pBy7OAK8X154v7GV3D9oqJsw== user@host"
     # pw is test
-    password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
+    password: "$6$salt$xdLuw21n.5WciQUUpHTTPfR6QwS..Z1Q/4xGfiyYa51WSQktzSXYXSk2zBp.Is5r9WiXrGqRmHpEG0iG0HaSk."
     admin: True
   - name: hanna
     # pw is test
-    password: $6$rounds=100000$hwVEuD1AWgi/jglP$6Gk9E9unnJE3mldjetE/EP8ZoSoUExiw7v0kbABSJLaeHHSfiQM1jvVjJT2lFI7.I1OCsFwWo5fm4aJcbQmyE1
+    password: "$6$salt$xdLuw21n.5WciQUUpHTTPfR6QwS..Z1Q/4xGfiyYa51WSQktzSXYXSk2zBp.Is5r9WiXrGqRmHpEG0iG0HaSk."
 
 
 harddisks:
@@ -16,12 +16,11 @@ harddisks:
     dest: /mnt/alpha
     fstype: ext4
     opts: defaults
-    #btrfs_subvolumes: []  # optional
+    is_green: yes
   - uuid: 1cbd07dc-4b98-496f-8ec3-be915ee1e906
     dest: /mnt/beta
     fstype: ext4
     opts: defaults
-    #btrfs_subvolumes: []  # optional
   - uuid: 083f5ebd-b0e5-4a2d-b750-a42dfdaaa31d
     dest: /mnt/charlie
     opts: defaults

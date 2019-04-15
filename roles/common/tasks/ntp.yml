@@ -1,11 +1,12 @@
 ---
 - name: Install ntp
-  apt: pkg=ntp state=installed install_recommends=no
-
-- name: Configure ntp
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  notify:
-    - restart ntp
+  apt:
+    install_recommends: no
+    pkg: ntp
+    state: present
 
 - name: Ensure ntpd is running and enabled
-  service: name=ntp state=started enabled=yes
+  service:
+    enabled: yes
+    name: ntp
+    state: started

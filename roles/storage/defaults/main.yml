@@ -1,15 +1,13 @@
-btrfs_version: 3.16.2
+mergerfs_version: 2.25.1
+
 harddisks: []
 union_mount: []
 directories: []
-use_aufs: no
-use_mhddfs: yes
 
 #harddisks:
 #  - uuid:
 #    dest: /mnt/alpha
 #    fstype: btrfs or ext4
-#    btrfs_subvolumes: []  # optional
 
 #union_mount:
 #  - dest: /mnt/union

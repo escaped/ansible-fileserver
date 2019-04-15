@@ -1,0 +1,6 @@
+---
+- name: do not load nvidia driver
+  copy:
+    dest: /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    src: blacklist-nvidia.conf
+  notify: update initramfs

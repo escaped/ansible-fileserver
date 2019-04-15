@@ -1,23 +1,28 @@
 ---
-- name: install drivers
-  apt: name={{item}} state=installed install_recommends=no
-  with_items:
-    - linux-firmware-nonfree
-    - amd64-microcode
+- name: install drivers and utilities
+  apt:
+    install_recommends: no
+    name:
+      - intel-microcode
+      - linux-firmware
+      - powertop
+    state: present
 
 - name: install acpi
-  apt: name={{item}} state=installed install_recommends=no
-  with_items:
+  apt:
+    install_recommends: no
+    name:
       - acpi
       - acpid
       - acpi-support
+    state: present
 
 - name: start acpid
-  service: name=acpid state=started enabled=yes
-
-- name: install powermanagement udev rule
-  copy: src=90-local-n54l.rules dest=/etc/udev/rules.d/90-local-n54l.rules
-  notify: reload udev
+  service:
+    enabled: yes
+    name: acpid
+    state: started
 
 - include: hdparm.yml tags=hdparm
-- include: powernap.yml tags=powernap
+- include: nvidia.yml tags=nvidia
+- include: tuned.yml tags=tuned

@@ -1,21 +1,34 @@
 ---
 - name: Add ssh users
-  user: name={{item.name}} update_password=on_create password={{item.password}}
-  with_items: users
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    update_password: on_create
+  with_items: "{{ users }}"
 
 - name: add users group
-  group: name=users state=present
+  group:
+    name: users
+    state: present
 
 - name: Add users to 'users' group
-  user: name={{item.name}} groups=users append=yes
-  with_items: users
+  user:
+    append: yes
+    groups: users
+    name: "{{ item.name }}"
+  with_items: "{{ users }}"
 
 - name: add public keys to authorized_keys files
-  authorized_key: user={{item.name}} key="{{item.key}}"
+  authorized_key:
+    key: "{{ item.key }}"
+    user: "{{ item.name }}"
   when: item.key is defined
-  with_items: users
+  with_items: "{{ users }}"
 
 - name: add sudo permissions
-  user: name={{item.name}} groups=sudo append=yes
+  user:
+    append: yes
+    groups: sudo
+    name: "{{ item.name }}"
   when: item.admin is defined and item.admin
-  with_items: users
+  with_items: "{{ users }}"

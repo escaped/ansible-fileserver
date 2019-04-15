@@ -10,6 +10,10 @@
   os level         = 15    # Beat everything except NT/2000 servers.
   local master     = yes
 
+# https://askubuntu.com/a/1066049
+  lanman auth = yes
+  ntlm auth = yes
+
 # Logging
   log file = /var/log/samba.log
   max log size = 1000

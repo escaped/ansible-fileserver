@@ -1,18 +1,24 @@
 ---
 - name: Install ufw
-  apt: pkg=ufw state=present
+  apt:
+    pkg: ufw
+    state: present
 
 - name: Deny everything and enable UFW
-  ufw: state=enabled policy=deny
+  ufw:
+    direction: incoming
+    policy: deny
+    state: enabled
 
 - name: Set firewall rule for DNS
-  ufw: rule=allow port=domain
-
-- name: Configure mosh
-  copy: src=mosh.ufw dest=/etc/ufw/applications.d/mosh owner=root mode=0644
+  ufw:
+    port: domain
+    rule: allow
 
 - name: Set firewall rules
-  ufw: rule=allow name={{item}}
+  ufw:
+    name: "{{ item }}"
+    rule: allow 
   with_items:
     - OpenSSH
     - mosh

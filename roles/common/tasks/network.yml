@@ -1,0 +1,13 @@
+---
+
+- name: network | install ethtool
+  apt:
+    install_recommends: no
+    pkg: ethtool
+    state: present
+
+- name: enable wol
+  copy:
+    dest: /etc/udev/rules.d/81-wol.rules
+    src: 81-wol.rules
+  notify: reload udev

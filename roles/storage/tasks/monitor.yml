@@ -1,32 +1,51 @@
 ---
 - name: smartmontools | install
-  apt: name=smartmontools state=installed install_recommends=no
+  apt:
+    install_recommends: no
+    name: smartmontools
+    state: present
 
 - name: smartmontools | configure
-  copy: src=smartd.conf dest=/etc/smartd.conf
+  copy:
+    dest: /etc/smartd.conf
+    src: smartd.conf
   notify: restart smartmontools
 
 - name: smartmontools | enable service
-  lineinfile: dest=/etc/default/smartmontools regexp="^#start_smartd"
-              line="start_smartd=yes" state=present
-  when: vm != True
+  lineinfile:
+    dest: /etc/default/smartmontools
+    line: "start_smartd: yes"
+    regexp: "^#start_smartd"
+    state: present
   notify: restart smartmontools
+  when: vm != True
 
 - name: smartmontools | start service
-  service: name=smartmontools state=running enabled=yes
+  service:
+    enabled: yes
+    name: smartmontools 
+    state: started
   when: vm != True
 
-
-- name: sec | install for btrfs monitor
-  apt: name=sec state=installed
-
-- name: sec | configure
-  copy: src=sec dest=/etc/default/sec
-  notify: restart sec
-
-- name: sec | btrfs rules
-  copy: src=sec.conf dest=/etc/sec.conf
-  notify: restart sec
-
-- name: sec | enable service
-  service: name=sec state=running enabled=yes
+# - name: sec | install for btrfs monitor
+#   apt:
+#     name: sec
+#     state: present
+# 
+# - name: sec | configure
+#   copy:
+#     dest: /etc/default/sec
+#     src: sec
+#   notify: restart sec
+# 
+# - name: sec | btrfs rules
+#   copy:
+#     dest: /etc/sec.conf
+#     src: sec.conf
+#   notify: restart sec
+# 
+# - name: sec | enable service
+#   service:
+#     enabled: yes
+#     name: sec
+#     state: started

@@ -9,13 +9,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   config.vm.provider :virtualbox do |vbox, override|
-    override.vm.box = 'ubuntu/trusty64'
+    override.vm.box = 'ubuntu/bionic64'
     vbox.name = "fileserver"
     vbox.customize ["modifyvm", :id, "--memory", 2048]
 
-    vbox.customize ['storageattach', :id, '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', 'disk1.vdi']
-    vbox.customize ['storageattach', :id, '--storagectl', 'SATAController', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', 'disk2.vdi']
-    vbox.customize ['storageattach', :id, '--storagectl', 'SATAController', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', 'disk3.vdi']
+    vbox.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', 'disk1.vdi']
+    vbox.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', 'disk2.vdi']
+    vbox.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 4, '--device', 0, '--type', 'hdd', '--medium', 'disk3.vdi']
   end
 
   config.vm.hostname = "Nemo"
@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = 'playbook.yml'
     ansible.inventory_path = "hosts"
     ansible.host_key_checking = false
-    #ansible.tags = 'samba'
-    #ansible.verbose = 'vvvv'
+
+    # ansible.verbose = "vvvv"
   end
 end

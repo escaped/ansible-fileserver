@@ -1,55 +1,75 @@
 ---
 - name: enable multiverse repository
-  apt_repository: repo="{{item}}" update_cache=yes state=present
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
   with_items:
-    - "deb http://archive.ubuntu.com/ubuntu trusty multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu trusty multiverse"
-    - "deb http://archive.ubuntu.com/ubuntu trusty-updates multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu trusty-updates multiverse"
+    - "deb http://archive.ubuntu.com/ubuntu bionic multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu bionic multiverse"
+    - "deb http://archive.ubuntu.com/ubuntu bionic-updates multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu bionic-updates multiverse"
 
 - name: enable backports repository
-  apt_repository: repo="{{item}}" update_cache=yes state=present
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
   with_items:
-    - "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse"
-    - "deb-src http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse"
-
-- name: set hostname
-  template: src=hostname.j2 dest=/etc/hostname
-
-- name: set default shell for useradd
-  lineinfile: dest=/etc/default/useradd regexp="^SHELL=" line="SHELL=/bin/bash"
+    - "deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse"
 
 - name: Install necessities and nice-to-haves
-  apt: pkg={{item}} state=installed install_recommends=no
-  with_items:
-    - sudo
-    - vim
-    - htop
-    - iftop
-    - iotop
-    - unzip
-    - mosh
-    - git
-    - gdisk
-    - unrar
-    - unzip
-    - p7zip
+  apt:
+    install_recommends: no
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - gdisk
+      - git
+      - htop
+      - iftop
+      - iotop
+      - mosh
+      - p7zip
+      - software-properties-common
+      - sudo
+      - unrar
+      - unzip
+      - vim
+      - zsh
+    state: present
+
+- name: set hostname
+  template:
+    dest: /etc/hostname
+    src: hostname.j2
+
+- name: set default shell for useradd
+  lineinfile:
+    dest: /etc/default/useradd
+    line: "SHELL: /bin/zsh"
+    regexp: "^SHELL: "
+
+
+- name: set grub timeout to 3 in /etc/default/grub
+  replace:
+    dest: /etc/default/grub
+    regexp: "^(GRUB_TIMEOUT)=[0-9]*$"
+    replace: "\\1=3"
+  notify: update grub
+
+
+- name: update kernel parameters
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: "GRUB_CMDLINE_LINUX_DEFAULT=\"intel_iommu=on\""
+  notify: update grub
 
 - include: users.yml tags=users
-
-- include: kernel.yml tags=kernel
-  vars:
-    kernel_version: 3.16.6-031606-generic
-    kernel_name: v3.16.6-utopic
-    kernel_debs:
-      - linux-image-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
-      - linux-headers-3.16.6-031606_3.16.6-031606.201410150635_all.deb
-      - linux-headers-3.16.6-031606-generic_3.16.6-031606.201410150635_amd64.deb
-
 - include: ufw.yml tags=ufw
 - include: security.yml tags=security
 - include: ntp.yml tags=ntp
+- include: network.yml tags=network
 - include: ssmtp.yml tags=ssmtp
-
-# n54l specific
-- include: ethernet.yml tags=ethernet

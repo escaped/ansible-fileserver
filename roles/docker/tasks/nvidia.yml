@@ -1,0 +1,19 @@
+---
+- name: Install release key
+  apt_key:
+    url: https://nvidia.github.io/nvidia-docker/gpgkey
+    state: present
+
+- name: Add nvidia-docker repository
+  apt_repository:
+    repo: "deb https://nvidia.github.io/{{ item }}/ubuntu18.04/amd64 /"
+    state: present
+  with_items:
+    - libnvidia-container
+    - nvidia-container-runtime
+    - nvidia-docker
+
+- name: Install nvidia-docker
+  apt:
+    name: nvidia-docker2
+  notify: restart docker

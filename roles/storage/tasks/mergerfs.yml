@@ -1,0 +1,36 @@
+---
+- name: mergerfs | download
+  get_url:
+    dest: "/opt/mergerfs_{{ mergerfs_version }}.deb"
+    url: "https://github.com/trapexit/mergerfs/releases/download/{{ mergerfs_version }}/mergerfs_{{ mergerfs_version }}.ubuntu-bionic_amd64.deb"
+  register: downloaded
+
+- name: mergerfs | install
+  apt:
+    deb: "/opt/mergerfs_{{ mergerfs_version }}.deb"
+    state: present
+  when: downloaded.changed
+
+- name: ensure directories to merge do exists
+  file:
+    path: "{{ item.1 }}"
+    state: directory
+  with_subelements:
+    - "{{ union_mount }}"
+    - dirs
+
+- name: create mount points for union mounts
+  file:
+    path: "{{ item.dest }}"
+    recurse: yes
+    state: directory
+  with_items: "{{ union_mount }}"
+
+- name: mount unification of directories
+  mount:
+    fstype: fuse.mergerfs
+    name: "{{ item.dest }}"
+    opts: "allow_other,use_ino,category.create=rand"
+    src: "{{ item.dirs|join(':') }}"
+    state: mounted
+  with_items: "{{ union_mount }}"

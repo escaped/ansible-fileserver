@@ -1,11 +1,6 @@
 ---
 - include: btrfs.yml tags=btrfs
-- include: fstab.yml tags=fstab
-- include: directories.yml tags=directories
-- include: aufs.yml
-  tags: aufs
-  when: use_aufs and not use_mhddfs
-- include: mhddfs.yml
-  tags: mhddfs
-  when: use_mhddfs
-- include: monitor.yml tag=monitor
+# - include: fstab.yml tags=mount
+# - include: directories.yml tags=directories
+# - include: mergerfs.yml tags=mount
+- include: monitor.yml tags=monitor

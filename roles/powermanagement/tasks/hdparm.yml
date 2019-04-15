@@ -1,9 +1,28 @@
 ---
-- name: install hdparm
-  apt:  name=hdparm state=installed install_recommends=no
-
-- name: spindown harddisks
-  template: src=hdparm.conf.j2 dest=/etc/hdparm.conf
+- name: install hd powermanagent tools
+  apt:
+    install_recommends: no
+    name: 
+      - hdparm
+      - idle3-tools
+    state: present
 
 - name: disable apm check (required for WD green)
-  lineinfile: dest=/usr/lib/pm-utils/power.d/95hdparm-apm regexp="^(\s*)if hdparm \-i \$dev" line="\1if true" backrefs=yes
+  lineinfile:
+    backrefs: yes
+    dest: /usr/lib/pm-utils/power.d/95hdparm-apm
+    line: "\\1if true"
+    regexp: "^(\\s*)if hdparm \\-i \\$dev"
+
+- name: spindown harddisks after 5 minutes
+  copy:
+    dest: /etc/udev/rules.d/69-hdparm.rules
+    src: 69-hdparm.rules
+  notify: reload udev
+
+- name: set idle3 timer (5 min) on WD drives (https://wiki.archlinux.org/index.php/hdparm)
+  shell: "idle3ctl -s 138 /dev/disk/by-uuid/{{ item.uuid }} && touch /root/idle3-{{ item.uuid }}"
+  args:
+    creates: "/root/idle3-{{ item.uuid }}"
+  when: not vm and item.is_green|default(false)
+  with_items: "{{ harddisks }}"

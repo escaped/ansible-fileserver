@@ -1,0 +1,19 @@
+---
+
+- name: tuned | install
+  apt:
+    install_recommends: no
+    name: tuned
+    state: present
+
+- name: tuned | enable service
+  service:
+    enabled: yes
+    name: tuned
+    state: started
+
+- name: tuned | enable powersaving profile
+  copy:
+    dest: /etc/tuned/recommend.conf
+    src: recommend.conf
+  notify: restart tuned

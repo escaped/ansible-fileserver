@@ -1,47 +1,72 @@
 ---
 - name: samba is installed
-  apt: name={{item}} state=installed install_recommends=no
-  with_items:
-    - samba
-    - libpam-smbpass
+  apt:
+    install_recommends: no
+    pkg:
+      - samba
+      # not available on 18.04
+      # - libpam-smbpass
+    state: present
 
 - name: samba share groups
-  group: name={{samba.group}} state=present
+  group:
+    name: "{{ samba.group }}"
+    state: present
 
 - name: ensure users exists
-  command: id -u {{item.name}}
+  command: "id -u {{ item.name }}"
   changed_when: False
-  with_items: samba.users
+  with_items: "{{ samba.users }}"
 
 - name: add guest user to samba
-  shell: (echo {{samba.guest_password}}; echo {{samba.guest_password}} ) | smbpasswd -a -s nobody && touch /root/.smbuser_nobody
-         creates=/root/.smbuser_nobody
+  shell: "(echo {{ samba.guest_password }}; echo {{ samba.guest_password }} ) | smbpasswd -a -s nobody && touch /root/.smbuser_nobody"
+  args:
+    creates: /root/.smbuser_nobody
 
 - name: add users to samba
-  shell: (echo {{item.initial_password}}; echo {{item.initial_password}} ) | smbpasswd -a -s {{item.name}} && touch /root/.smbuser_{{item.name}}
-         creates=/root/.smbuser_{{item.name}}
-  with_items: samba.users
+  shell: "(echo {{ item.initial_password }}; echo {{ item.initial_password }} ) | smbpasswd -a -s {{item.name}} && touch /root/.smbuser_{{ item.name }}"
+  args:
+    creates: "/root/.smbuser_{{ item.name }}"
+  with_items: "{{ samba.users }}"
 
 - name: create shared folders
-  file: path="{{item.1.path}}" state=directory mode=775 owner=root group={{samba.group}}
-  with_items: samba.shares.items()
+  file:
+    group: "{{ samba.group }}"
+    mode: 775
+    owner: root
+    path: "{{ item.1.path }}"
+    state: directory
+  with_items: "{{ samba.shares.items() }}"
 
 - name: make public folders writeable
-  file: path="{{item.1.path}}" state=directory mode=777
+  file:
+    mode: 777
+    path: "{{ item.1.path }}"
+    state: directory
   when: item.1.public is defined and item.1.public == True
-  with_items: samba.shares.items()
+  with_items: "{{ samba.shares.items() }}"
 
 - name: samba config
-  template: src=smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode=0644
+  template:
+    dest: /etc/samba/smb.conf
+    group: root
+    mode: 0644
+    owner: root
+    src: smb.conf.j2
   notify:
     - restart smbd
     - restart nmbd
 
 - name: start smbd
-  service: name=smbd state=started enabled=yes
-
-- name: start nmbd
-  service: name=nmbd state=started enabled=yes
+  service:
+    enabled: yes
+    name: "{{ item }}"
+    state: started
+  with_items:
+    - smbd
+    - nmbd
 
 - name: Set firewall rule
-  ufw: rule=allow name=samba
+  ufw: 
+    rule: allow
+    name: samba

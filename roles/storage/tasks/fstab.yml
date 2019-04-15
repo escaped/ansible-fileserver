@@ -1,10 +1,16 @@
 ---
 - name: create mount points
-  file: path={{item.mount}} state=directory
-  with_items: harddisks
+  file:
+    path: "{{ item.mount }}"
+    state: directory
+  with_items: "{{ harddisks }}"
 
 - name: mount disks
-  mount: name={{item.dest}} src="UUID={{item.uuid}}" fstype={{item.fstype}} opts={{item.opts}} state=mounted
-  with_items: harddisks
-
-# TODO mount subvolumes
+  mount:
+    boot: yes
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts }}"
+    path: "{{ item.dest }}"
+    src: "UUID={{ item.uuid }}"
+    state: mounted
+  with_items: "{{ harddisks }}"

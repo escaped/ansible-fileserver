@@ -1,6 +1,4 @@
 ---
-# Defines handlers applicable across all machines in the infrastructure.
-
 - name: restart ntp
   service: name=ntp state=restarted
 
@@ -10,8 +8,8 @@
 - name: restart fail2ban
   service: name=fail2ban state=restarted
 
-- name: run rc.local
-  command: /usr/bin/env sh /etc/rc.local
+- name: update grub
+  command: update-grub
 
-- name: reload sysctl
-  command: sysctl -p
+- name: reload udev
+  command: udevadm control --reload-rules

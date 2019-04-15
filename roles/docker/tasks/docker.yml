@@ -1,0 +1,33 @@
+---
+- name: Install release key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+
+- name: Install
+  apt:
+    name: docker-ce
+    state: present
+
+- name: start
+  service:
+    enabled: yes
+    name: docker 
+    state: started
+
+- name: update facts if docker0 is not defined
+  setup:
+    filter: ansible_docker[0]
+  when: ansible_docker0 is not defined
+
+- name: Allow docker containers to access the host
+  ufw:
+    rule: allow
+    interface: docker0
+    direction: in
+    proto: tcp

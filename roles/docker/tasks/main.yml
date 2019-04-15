@@ -1,0 +1,4 @@
+---
+
+- include: docker.yml tags=docker
+- include: nvidia.yml tags=docker,nvidia

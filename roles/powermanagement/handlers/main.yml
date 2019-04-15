@@ -1,6 +1,9 @@
 ---
-- name: restart powernap
-  service: name=powernap state=restarted
-
 - name: reload udev
   command: udevadm control --reload-rules
+
+- name: update initramfs
+  command: update-initramfs -u
+
+- name: restart tuned
+  command: systemctl restart tuned
