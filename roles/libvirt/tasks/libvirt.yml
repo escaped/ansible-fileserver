@@ -1,0 +1,30 @@
+---
+- name: Install
+  apt:
+    pkg:
+      - bridge-utils
+      - libvirt-bin
+      - libvirt-clients
+      - libvirt-daemon-system
+      - ovmf
+      - python3-libvirt
+      - qemu-kvm
+    state: present
+
+- name: start
+  service:
+    enabled: yes
+    name: libvirtd
+    state: started
+
+- name: prepare ovmf
+  shell: cp /usr/share/OVMF/OVMF_VARS.fd /var/lib/libvirt/qemu/nvram/Windows_VARS.fd
+  args:
+    creates: /var/lib/libvirt/qemu/nvram/Windows_VARS.fd
+
+- name: create Windows VM
+  virt:
+    command: define
+    name: Windows
+    uri: 'qemu:///system'
+    xml: "{{ lookup('template', 'Windows.xml.j2') }}"
